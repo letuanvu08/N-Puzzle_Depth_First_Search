@@ -50,7 +50,7 @@ class Generater_N_Puzzle:
         self.score=0
     def generate_puzzle(self):
         self.board=[[col for col in range(self.k*row,self.k*(row+1))] for row in range(self.k)]
-        for _ in range(200):
+        for _ in range(50*self.k):
             Action.Move(randint(0,3),self)
         return self.UpdateScore()
     def UpdateScore(self):
@@ -72,30 +72,31 @@ class Generater_N_Puzzle:
 
 class Depth_First_Search:
     @staticmethod
-    def search(puzzle,leverdeep):
+    def search(puzzle,leverdeep,preAction):
+    
         if(leverdeep>LIMIT):
             return False,puzzle
         for i in range(4):
-            if Action.Move(i,puzzle):
+            if (i+2)%4!=preAction and Action.Move(i,puzzle):
                
                 if puzzle.UpdateScore()==puzzle.k**2:
                     return True,puzzle
-                result,puzzle_child=Depth_First_Search.search(puzzle.clone(),leverdeep+1)
+                result,puzzle_child=Depth_First_Search.search(puzzle.clone(),leverdeep+1,i)
                 if result:
                     return True,puzzle_child
                 Action.Move((i+2)%4,puzzle)
         return False,puzzle
         
 if __name__=='__main__':
-    LIMIT=15
-    puzzle=Generater_N_Puzzle(3)
+    LIMIT=20
+    puzzle=Generater_N_Puzzle(4)
     puzzle.generate_puzzle()
     puzzle.displayBoard()
-    result,puzzle_child=Depth_First_Search.search(puzzle,0)
+    result,puzzle_child=Depth_First_Search.search(puzzle,0,-1)
     if result:
-        print("giai thanh cong!")
+        print("Successfully!")
     else:
-        print("giai that bai!")
+        print("failed!")
     puzzle_child.displayBoard()
 
             
