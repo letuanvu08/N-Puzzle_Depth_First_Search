@@ -1,5 +1,6 @@
 from random import sample,choice,randint
 from copy import deepcopy
+from overloading import overload
 UP=0
 RIGHT=1
 DOWN=2
@@ -46,12 +47,10 @@ class Generater_N_Puzzle:
         self.row_empty=0
         self.col_empty=0
         self.board=[]
-        self.score=self.generate_puzzle()
-        self.displayBoard()
-
+        self.score=0
     def generate_puzzle(self):
         self.board=[[col for col in range(self.k*row,self.k*(row+1))] for row in range(self.k)]
-        for _ in range(1000):
+        for _ in range(200):
             Action.Move(randint(0,3),self)
         return self.UpdateScore()
     def UpdateScore(self):
@@ -65,7 +64,12 @@ class Generater_N_Puzzle:
         [print(row) for row in self.board]
 
     def clone(self):
-        return deepcopy(self)
+        new_puzz= Generater_N_Puzzle(self.k)
+        new_puzz.board= deepcopy(self.board)
+        new_puzz.row_empty=self.row_empty
+        new_puzz.col_empty=self.col_empty
+        return new_puzz
+
 class Depth_First_Search:
     @staticmethod
     def search(puzzle,leverdeep):
@@ -83,8 +87,10 @@ class Depth_First_Search:
         return False,puzzle
         
 if __name__=='__main__':
-    LIMIT=100
+    LIMIT=15
     puzzle=Generater_N_Puzzle(3)
+    puzzle.generate_puzzle()
+    puzzle.displayBoard()
     result,puzzle_child=Depth_First_Search.search(puzzle,0)
     if result:
         print("giai thanh cong!")
