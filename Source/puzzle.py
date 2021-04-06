@@ -50,7 +50,7 @@ class Generater_N_Puzzle:
         self.score=0
     def generate_puzzle(self):
         self.board=[[col for col in range(self.k*row,self.k*(row+1))] for row in range(self.k)]
-        for _ in range(50*self.k):
+        for _ in range(100*self.k):
             Action.Move(randint(0,3),self)
         return self.UpdateScore()
     def UpdateScore(self):
@@ -63,41 +63,32 @@ class Generater_N_Puzzle:
     def displayBoard(self):
         [print(row) for row in self.board]
 
-    def clone(self):
-        new_puzz= Generater_N_Puzzle(self.k)
-        new_puzz.board= deepcopy(self.board)
-        new_puzz.row_empty=self.row_empty
-        new_puzz.col_empty=self.col_empty
-        return new_puzz
-
 class Depth_First_Search:
     @staticmethod
     def search(puzzle,leverdeep,preAction):
     
         if(leverdeep>LIMIT):
-            return False,puzzle
+            return False
         for i in range(4):
             if (i+2)%4!=preAction and Action.Move(i,puzzle):
                
                 if puzzle.UpdateScore()==puzzle.k**2:
-                    return True,puzzle
-                result,puzzle_child=Depth_First_Search.search(puzzle.clone(),leverdeep+1,i)
-                if result:
-                    return True,puzzle_child
+                    return True
+                if Depth_First_Search.search(puzzle,leverdeep+1,i):
+                    return True
                 Action.Move((i+2)%4,puzzle)
-        return False,puzzle
+        return False
         
 if __name__=='__main__':
-    LIMIT=20
-    puzzle=Generater_N_Puzzle(4)
+    LIMIT=50
+    puzzle=Generater_N_Puzzle(3)
     puzzle.generate_puzzle()
     puzzle.displayBoard()
-    result,puzzle_child=Depth_First_Search.search(puzzle,0,-1)
-    if result:
+    if Depth_First_Search.search(puzzle,0,-1):
         print("Successfully!")
     else:
         print("failed!")
-    puzzle_child.displayBoard()
+    puzzle.displayBoard()
 
             
 
