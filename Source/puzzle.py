@@ -1,6 +1,7 @@
 from random import sample,choice,randint
 from copy import deepcopy
 from overloading import overload
+from time import time
 UP=0
 RIGHT=1
 DOWN=2
@@ -81,14 +82,17 @@ class Depth_First_Search:
         
 if __name__=='__main__':
     LIMIT=50
-    puzzle=Generater_N_Puzzle(3)
+    puzzle=Generater_N_Puzzle(4)
     puzzle.generate_puzzle()
     puzzle.displayBoard()
+    start=time()
     if Depth_First_Search.search(puzzle,0,-1):
         print("Successfully!")
     else:
         print("failed!")
+    end=time()
     puzzle.displayBoard()
+    print("Run times:"+str(int(end-start))+"s")
 
             
 
